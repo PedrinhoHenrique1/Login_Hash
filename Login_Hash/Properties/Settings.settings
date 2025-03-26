@@ -1,0 +1,29 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Login_Hash.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Entrar_sdfConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionString&gt;Data Source=sqlexpress;Initial Catalog=Entrar.sdf;Persist Security Info=True;User ID=aluno;Password=aluno;TrustServerCertificate=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=sqlexpress;Initial Catalog=Entrar.sdf;Persist Security Info=True;User ID=aluno;Password=aluno;TrustServerCertificate=True</Value>
+    </Setting>
+    <Setting Name="enderecoSMTP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">macoratti.smtp.com</Value>
+    </Setting>
+    <Setting Name="portaSMTP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">53</Value>
+    </Setting>
+    <Setting Name="emailSMTP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">macoratti@yahoo.com</Value>
+    </Setting>
+    <Setting Name="senhaSMTP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F</Value>
+    </Setting>
+    <Setting Name="LoginsConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=c:\dados\Entrar.sdf</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
