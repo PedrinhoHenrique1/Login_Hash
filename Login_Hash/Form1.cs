@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace Login_Hash
 {
@@ -61,26 +62,24 @@ namespace Login_Hash
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            //variaveis locais para tratar o usuario e a senha
-            string usuario = txtUsuarioLogin.Text;
-            string senha = Crypto.sha256encrypt(txtSenhaLogin.Text);
 
-            //percorre cada tabela do banco de dados
-            foreach (DataRow row in loginsDataSet.Acessos)
+            string usuario = txtUsuarioLogin.Text;
+            string senhaInserida = txtSenhaLogin.Text;
+
+            string hashArmazenado = BuscarHashSenhaDoBanco(usuario);
+
+            // Verifica se o hash foi encontrado
+            if (hashArmazenado != null)
             {
-                //e verifica pelo usuário e senha que coincidem
-                if (row.ItemArray[1].Equals(usuario) && row.ItemArray[2].Equals(senha))
+                string hashDaSenhaInserida = GerarHashSenha(senhaInserida);
+
+                if (hashDaSenhaInserida.Equals(hashArmazenado, StringComparison.OrdinalIgnoreCase))
                 {
-                    txtUsuarioLogin.Text = String.Empty;
-                    txtSenhaLogin.Text = String.Empty;
-                    MessageBox.Show("Login realizado com sucesso !");
-                    break;
+                    MessageBox.Show("Login realizado com sucesso!");
                 }
-                //Se não achar então
                 else
                 {
                     MessageBox.Show("Usuário/Senha incorretos");
-                    break;
                 }
             }
         }
@@ -127,8 +126,6 @@ namespace Login_Hash
                 Credentials = new NetworkCredential(txtEmailUsuarioSMTP.Text, txtSenhaEmailSMTP.Text),
                 EnableSsl = true
             };
-            cliente.Send(txtEmailUsuarioSMTP.Text, ParaEndereco, "Obrigado !", "Obrigado por seu registro ! \n Seu usuário/senha são: \n \nUsuário: "
-                     + ParaNome.ToString() + "\nSenha: " + _senha.ToString());
         }
 
         private void AdicionarUsuario(string _nomeUsuario, string _senha, string _confirmaSenha, string _email)
@@ -177,7 +174,7 @@ namespace Login_Hash
             //Se estiver tudo certo então cria o usuário
             else
             {
-                string _hashSenha = Crypto.sha256encrypt(_senha);
+                string _hashSenha = GerarHashSenha(_senha);
                 AdicionaUsuarioNoBD(_nomeUsuario, _hashSenha, _email);
 
                 txtUsuario.Text = String.Empty;
@@ -203,5 +200,32 @@ String.IsNullOrWhiteSpace(smtpAddress) || smtpPorta <= 0)
         {
             AdicionarUsuario(txtUsuario.Text, txtSenha.Text, txtConfirmarSenha.Text, txtEmail.Text);
         }
+
+        public static string GerarHashSenha(string senha)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(senha));
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+        private string BuscarHashSenhaDoBanco(string usuario)
+        {
+            foreach (DataRow row in loginsDataSet.Acessos)
+            {
+                if (row.ItemArray[1].Equals(usuario))
+                {
+                    return row.ItemArray[2].ToString();
+                }
+            }
+            return null;
+        }
+
     }
 }
